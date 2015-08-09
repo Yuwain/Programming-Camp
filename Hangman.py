@@ -2,12 +2,16 @@ from random import choice
 
 #Print out the letters found in the word or '_'
 def print_puzzle(word, guesses):
+     print ""
      for letter in word:
           if letter in guesses:
                print letter,
           else:
                print "_",
-     print "" 
+     print "\nAlready guessed: ",
+     for guess in guesses:
+          print guess,
+     print "\n"
 
 def main():
      f = open("wordlist.txt", 'r')      #Open a file for reading
@@ -40,13 +44,18 @@ def main():
                print "Please only guess letters"
           else:
                #If the guess is in our word and we haven't already guessed it
-               if (guess in word) and (not guess in guessed_list):
+               if (guess in word) and (guess not in guessed_list):
                     letters_found += word.count(guess)
                     guessed_list.append(guess) #Add the guess to our list of previous guesses
+               elif guess in guessed_list:
+                    wrong_guessed += 1
+                    print "Already guessed. {} guesses left".format(5-wrong_guessed)
                else:
                     wrong_guessed += 1
+                    guessed_list.append(guess)
                     print "Wrong guess. {} guesses left".format(5-wrong_guessed)
 
+          guessed_list.sort()
           print_puzzle(word, guessed_list)
 
                     
@@ -56,5 +65,5 @@ def main():
           print "The word was {}. Try again next time".format(word)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
      main()
